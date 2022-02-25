@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1839735485 &170627638 stripped
+Tilemap:
+  m_CorrespondingSourceObject: {fileID: 8785204406392120427, guid: 62aa0d7a1f9171c4fb0b4e248c78baf7, type: 3}
+  m_PrefabInstance: {fileID: 8785204406792180404}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &307353672
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -473,7 +478,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4612774249512402305, guid: 652f0b2b1e8efc7468b3d368c862d3db, type: 3}
+      propertyPath: m_tilemap
+      value: 
+      objectReference: {fileID: 170627638}
+    - target: {fileID: 4612774249512402305, guid: 652f0b2b1e8efc7468b3d368c862d3db, type: 3}
       propertyPath: playerMoveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4612774249512402305, guid: 652f0b2b1e8efc7468b3d368c862d3db, type: 3}
+      propertyPath: m_playerMoveSpeed
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4612774249512402310, guid: 652f0b2b1e8efc7468b3d368c862d3db, type: 3}
