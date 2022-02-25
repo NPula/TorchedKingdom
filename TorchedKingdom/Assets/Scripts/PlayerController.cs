@@ -43,6 +43,12 @@ public class PlayerController : MonoBehaviour
         // Get player input and set the players velocity.
         playerMoveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         
+        playerVelocity = playerMoveInput.normalized * playerMoveSpeed * Time.deltaTime;
+        
+        // doesnt work well with collisions but it stops movement jitteryness with the camera.
+        // TODO - create a different movement/collision system using raycasts instead later. 
+        transform.Translate(playerVelocity);
+
         // Change player animations
         SetPlayerAnimatorState();
     }
@@ -50,10 +56,10 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // Get the normalized player velocity
-        playerVelocity = playerMoveInput.normalized * playerMoveSpeed * Time.deltaTime;
+        //playerVelocity = playerMoveInput.normalized * playerMoveSpeed * Time.deltaTime;
 
         // Move the player.
-        playerRb.MovePosition(playerRb.position + playerVelocity);
+        //playerRb.MovePosition(playerRb.position + playerVelocity);
     }
 
     void SetPlayerAnimatorState()
