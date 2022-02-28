@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
@@ -10,7 +9,6 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get { return m_instance; } }
 
     [SerializeField] private float m_playerMoveSpeed = 1f;
-    [SerializeField] private Tilemap m_tilemap;
     
     private Rigidbody2D m_playerRb;
     private Animator m_playerAnimator;
@@ -22,7 +20,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 m_mapBottomLeftEdge;
     private Vector3 m_mapUpperRightEdge;
-
 
     private void Awake()
     {
@@ -40,15 +37,11 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        // Subscribe area change event
+        EventManager.StartListening("OnMapExit", OnChangeArea);
+
         m_playerRb = GetComponent<Rigidbody2D>();
         m_playerAnimator = GetComponent<Animator>();
-
-        // Get the area the player can walk on (size of tilemap).
-        if (m_tilemap)
-        {
-            m_mapBottomLeftEdge = m_tilemap.localBounds.min + new Vector3(0.5f, 0.5f, 0f); // Might need to adjust the vector3 offsets added to the localBounds.
-            m_mapUpperRightEdge = m_tilemap.localBounds.max + new Vector3(-0.5f, -0.5f, 0f);
-        }
     }
 
     private void Update()
@@ -63,9 +56,9 @@ public class PlayerController : MonoBehaviour
         transform.Translate(m_playerVelocity);
 
         // Clamp the player position to the tilemap size
-        transform.position = new Vector3(
-            Mathf.Clamp(transform.position.x, m_mapBottomLeftEdge.x, m_mapUpperRightEdge.x), 
-            Mathf.Clamp(transform.position.y, m_mapBottomLeftEdge.y, m_mapUpperRightEdge.y));
+        //transform.position = new Vector3(
+        //    Mathf.Clamp(transform.position.x, m_mapBottomLeftEdge.x, m_mapUpperRightEdge.x), 
+        //    Mathf.Clamp(transform.position.y, m_mapBottomLeftEdge.y, m_mapUpperRightEdge.y));
 
         // Change player animations
         SetPlayerAnimatorState();
@@ -92,5 +85,38 @@ public class PlayerController : MonoBehaviour
             m_playerAnimator.SetFloat("lastX", m_playerMoveInput.x);
             m_playerAnimator.SetFloat("lastY", m_playerMoveInput.y);
         }
+    }
+
+
+    // Set the area the player can move in or is confined to.
+    public void SetMoveLimit(Vector3 bottomLeftEdgeToSet, Vector3 topRightEdgeToSet)
+    {
+        m_mapBottomLeftEdge = bottomLeftEdgeToSet;
+        m_mapUpperRightEdge = topRightEdgeToSet;
+    }
+
+    public void OnChangeArea(Dictionary<string, object> message)
+    {
+        float newPosX = 0f;
+        float newPosY = 0f;
+
+        // TODO - change the hardcoded values later.
+        switch (message["direction"])
+        {
+            case "Up":
+                newPosY = 3f;
+                break;
+            case "Down":
+                newPosY = -3f;
+                break;
+            case "Left":
+                newPosX = -4f;
+                break;
+            case "Right":
+                newPosX = 4f;
+                break;
+        }
+
+        transform.position += new Vector3(newPosX, newPosY);
     }
 }

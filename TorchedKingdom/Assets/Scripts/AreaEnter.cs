@@ -14,6 +14,11 @@ public class AreaEnter : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // When loading new area fade the screen from black
+        //MenuManager.Instance.FadeImage();
+
+        MenuManager.Instance.FadeImage();
+
         if (transitionAreaName == PlayerController.Instance.TransitionName)
         {
             PlayerController.Instance.transform.position = transform.position;

@@ -17,6 +17,11 @@ public class AreaExit : MonoBehaviour
                 // TODO - Change the way scene loading works later.
                 PlayerController.Instance.TransitionName = transitionAreaName;
 
+                //MenuManager.Instance.FadeToBlack();
+
+                // When exiting area fade the screen to black
+                //MenuManager.Instance.FadeImage();
+
                 // Change Scene
                 SceneManager.LoadScene(sceneToLoad);
             }
