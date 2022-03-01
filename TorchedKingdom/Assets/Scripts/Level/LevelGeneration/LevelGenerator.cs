@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -6,10 +7,12 @@ using UnityEngine;
 public struct Room
 {
     public bool isUsed;
+    public Dictionary<string, bool> connections;
 
     public Room(bool used)
     {
         isUsed = used;
+        connections = new Dictionary<string, bool>();
     }
 }
 
@@ -125,6 +128,38 @@ public class LevelGenerator
         // Print the room layout to file here
         // C:\Users\Nick\AppData\LocalLow\DefaultCompany\TorchedKingdom\ LeveArray.txt
         PrintToFile();
+    }
+
+    private void GeneratePaths()
+    {
+        for (int i = 0; i < sizeY; i++)
+        {
+            for (int j = 0; j < sizeX; j++)
+            {
+                rooms[i, j].connections = GetNeighborRooms(i, j);
+                //bool down = rooms[i, j].connections["Down"];
+                //bool up = rooms[i, j].connections["Up"];
+                //bool left = rooms[i, j].connections["Left"];
+                //bool right = rooms[i, j].connections["Right"];
+            }
+        }
+    }
+
+    // Returns dictionary with neighbor values for a given room in rooms array.
+    private Dictionary<string, bool> GetNeighborRooms(int y, int x)
+    {
+        // Check if the rooms are used or not and make sure we don't index 
+        // outside the array bounds.
+        bool left = ((x - 1) >= 0) ? rooms[y, x - 1].isUsed : false;
+        bool right = ((x + 1) < sizeX) ? rooms[y, x + 1].isUsed : false;
+        bool up = ((y - 1) >= 0) ? rooms[y - 1, x].isUsed : false;
+        bool down = ((y + 1) < sizeY) ? rooms[y + 1, x].isUsed : false;
+
+        return new Dictionary<string, bool>() {
+            {"Left", left},
+            {"Right", right},
+            {"Up", up},
+            {"Down", down}};
     }
 
     private bool MovesAvailable(int currPosY, int currPosX)
