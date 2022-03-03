@@ -1581,6 +1581,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2060368117 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4612774249512402310, guid: 652f0b2b1e8efc7468b3d368c862d3db, type: 3}
+  m_PrefabInstance: {fileID: 4612774250322310980}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2060368118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060368117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2529e0c07b258694fa3b458a5556443f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_playerName: Tim
+  maxLevel: 50
+  m_playerLevel: 1
+  m_currentExp: 100
+  xpForEachLevel: 
+  baseLevelXP: 100
+  m_maxHP: 100
+  m_currentHP: 100
+  m_maxMana: 30
+  m_currentMana: 100
+  m_dexterity: 100
+  m_defence: 100
 --- !u!1 &2120938816
 GameObject:
   m_ObjectHideFlags: 0
