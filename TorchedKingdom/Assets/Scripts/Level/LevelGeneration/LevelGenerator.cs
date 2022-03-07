@@ -29,7 +29,7 @@ public enum Moves
 public class LevelGenerator 
 {
     // Number of rooms to generate
-    private int m_maxRoomAmount = 100;
+    private int m_maxRoomAmount = 10;
 
     // Room list size
     public int sizeX = 50;
@@ -124,6 +124,8 @@ public class LevelGenerator
             // Set the new room to used.
             rooms[indY, indX].isUsed = true;
         }
+
+        GeneratePaths();
 
         // Print the room layout to file here
         // C:\Users\Nick\AppData\LocalLow\DefaultCompany\TorchedKingdom\ LeveArray.txt

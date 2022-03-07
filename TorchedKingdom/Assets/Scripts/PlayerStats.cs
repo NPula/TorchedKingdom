@@ -9,7 +9,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] int maxLevel = 50;
     [SerializeField] private int m_playerLevel = 1;
     [SerializeField] private int m_currentExp;
-    [SerializeField] int[] xpForEachLevel;
+    [SerializeField] int[] xpForNextLevel;
     [SerializeField] int baseLevelXP = 100;
 
     [SerializeField] private int m_maxHP = 100;
@@ -23,13 +23,46 @@ public class PlayerStats : MonoBehaviour
 
     private void Start()
     {
-        xpForEachLevel = new int[maxLevel];
-        xpForEachLevel[0] = 0;
-        xpForEachLevel[1] = baseLevelXP;
+        xpForNextLevel = new int[maxLevel];
+        xpForNextLevel[0] = 0;
+        xpForNextLevel[1] = baseLevelXP;
 
-        for (int i = 2; i < xpForEachLevel.Length; i++)
+        for (int i = 2; i < xpForNextLevel.Length; i++)
         {
-            xpForEachLevel[i] = i * baseLevelXP;
+            xpForNextLevel[i] = (int)(0.02f * i * i * i + 3.06f * i * i * i + 105.6f * i);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            AddXP(100);
+        }
+    }
+
+    public void AddXP(int amountOfXp)
+    {
+        m_currentExp += amountOfXp;
+        if (m_currentExp > xpForNextLevel[m_playerLevel])
+        {
+            m_currentExp -= xpForNextLevel[m_playerLevel];
+            m_playerLevel++;
+
+            m_maxHP = (int)(m_maxHP * 1.06);
+            m_currentHP = m_maxHP;
+            
+            m_maxMana = (int)(m_maxHP * 1.06);
+            m_currentMana = m_maxMana;
+
+            if (m_playerLevel % 2 == 0)
+            {
+                m_dexterity++;
+            }
+            else
+            {
+                m_defence++;
+            }
         }
     }
 }

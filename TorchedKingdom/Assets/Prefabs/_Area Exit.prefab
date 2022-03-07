@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5116381563327202690}
   - component: {fileID: 5116381563327202691}
   m_Layer: 0
-  m_Name: Area Exit
+  m_Name: _Area Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,4 +72,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneToLoad: Test
   transitionAreaName: Home - 1
-  hasSpawnedIn: 0

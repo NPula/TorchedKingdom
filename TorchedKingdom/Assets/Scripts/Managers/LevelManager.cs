@@ -13,8 +13,15 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private List<GameObject> m_levelPieces;
     private List<Tilemap> tilemaps;
 
+    [SerializeField] private GameObject tilemapWallUp;
+    [SerializeField] private GameObject tilemapWallRight;
+    [SerializeField] private GameObject tilemapWallLeft;
+    [SerializeField] private GameObject tilemapWallDown;
+
+
     // Area the player is confined to.
     [SerializeField] private PolygonCollider2D m_playerBounds;
+    [SerializeField] private Tilemap m_mapBounds;
 
     // Offset used to keep player in the play area.
     [SerializeField] private float m_offsetX = 0f;
@@ -37,15 +44,21 @@ public class LevelManager : MonoBehaviour
 
         // Used for grabbing the size of the first instantiated tilemap
         // Creating an object just to destroy it is kinda shit but it works.
-        GameObject go = Instantiate(m_levelPieces[0]);
-        Bounds tilemapBounds= go.transform.Find("Ground").GetComponent<Tilemap>().localBounds;
-        Destroy(go);
+        //GameObject go = Instantiate(m_levelPieces[0]);
+        //Bounds tilemapBounds= go.transform.Find("Ground").GetComponent<Tilemap>().localBounds;
+        //Destroy(go);
+
+        Bounds tileBounds = m_mapBounds.localBounds;
 
         // Confine player to tilemap size
         // TODO - might need to change with the addition of random map layouts.
-        m_bottomLeftEdge = tilemapBounds.min + new Vector3(m_offsetX, m_offsetY, 0f);
-        m_topRightEdge = tilemapBounds.max + new Vector3(-m_offsetX, -m_offsetY, 0f);
-        
+        //m_bottomLeftEdge = tilemapBounds.min + new Vector3(m_offsetX, m_offsetY, 0f);
+        //m_topRightEdge = tilemapBounds.max + new Vector3(-m_offsetX, -m_offsetY, 0f);
+
+        m_bottomLeftEdge = tileBounds.min + new Vector3(m_offsetX, m_offsetY, 0f);
+        m_topRightEdge = tileBounds.max + new Vector3(-m_offsetX, -m_offsetY, 0f);
+
+
         //m_bottomLeftEdge = m_playerBounds.bounds.min + new Vector3(m_offsetX, m_offsetY, 0f);
         //m_topRightEdge = m_playerBounds.bounds.max + new Vector3(-m_offsetX, -m_offsetY, 0f);
 
@@ -92,6 +105,32 @@ public class LevelManager : MonoBehaviour
                     // Instantiate piece
                     GameObject go = Instantiate(m_levelPieces[index], new Vector3(newLocX, newLocY), Quaternion.identity);
                     go.transform.parent = parent.transform;
+
+                    // This only happens once on load so who cares.
+                    // We should find an easier way of managing this later. This method makes it
+                    // annoying when making changes to objects
+                    GameObject wallUp = go.transform.Find("DoorSlots").Find("UpperWall").gameObject;
+                    GameObject wallDown = go.transform.Find("DoorSlots").Find("BottomWall").gameObject;
+                    GameObject wallRight = go.transform.Find("DoorSlots").Find("RightWall").gameObject;
+                    GameObject wallLeft = go.transform.Find("DoorSlots").Find("LeftWall").gameObject;
+
+                    if (m_levelGen.rooms[i, j].connections["Up"])
+                    {
+                        wallUp.SetActive(false);
+                        Debug.Log("Called");
+                    }
+                    if (m_levelGen.rooms[i, j].connections["Down"])
+                    {
+                        wallDown.SetActive(false);
+                    }
+                    if (m_levelGen.rooms[i, j].connections["Left"])
+                    {
+                        wallLeft.SetActive(false);
+                    }
+                    if (m_levelGen.rooms[i, j].connections["Right"])
+                    {
+                        wallRight.SetActive(false);
+                    }
                 }
             }
         }
