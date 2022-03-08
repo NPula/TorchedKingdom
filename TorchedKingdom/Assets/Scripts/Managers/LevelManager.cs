@@ -13,11 +13,10 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private List<GameObject> m_levelPieces;
     private List<Tilemap> tilemaps;
 
-    [SerializeField] private GameObject tilemapWallUp;
-    [SerializeField] private GameObject tilemapWallRight;
-    [SerializeField] private GameObject tilemapWallLeft;
-    [SerializeField] private GameObject tilemapWallDown;
-
+    //[SerializeField] private GameObject tilemapWallUp;
+    //[SerializeField] private GameObject tilemapWallRight;
+    //[SerializeField] private GameObject tilemapWallLeft;
+    //[SerializeField] private GameObject tilemapWallDown;
 
     // Area the player is confined to.
     [SerializeField] private PolygonCollider2D m_playerBounds;
@@ -114,22 +113,30 @@ public class LevelManager : MonoBehaviour
                     GameObject wallRight = go.transform.Find("DoorSlots").Find("RightWall").gameObject;
                     GameObject wallLeft = go.transform.Find("DoorSlots").Find("LeftWall").gameObject;
 
+                    GameObject doorUp = go.transform.Find("DoorSlots").Find("UpperDoor").gameObject;
+                    GameObject doorDown = go.transform.Find("DoorSlots").Find("BottomDoor").gameObject;
+                    GameObject doorRight = go.transform.Find("DoorSlots").Find("RightDoor").gameObject;
+                    GameObject doorLeft = go.transform.Find("DoorSlots").Find("LeftDoor").gameObject;
+
                     if (m_levelGen.rooms[i, j].connections["Up"])
                     {
                         wallUp.SetActive(false);
-                        Debug.Log("Called");
+                        doorUp.SetActive(true);
                     }
                     if (m_levelGen.rooms[i, j].connections["Down"])
                     {
                         wallDown.SetActive(false);
+                        doorDown.SetActive(true);
                     }
                     if (m_levelGen.rooms[i, j].connections["Left"])
                     {
                         wallLeft.SetActive(false);
+                        doorLeft.SetActive(true);
                     }
                     if (m_levelGen.rooms[i, j].connections["Right"])
                     {
                         wallRight.SetActive(false);
+                        doorRight.SetActive(true);
                     }
                 }
             }

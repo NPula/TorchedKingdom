@@ -3,23 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    private static GameManager m_instance;
-    public static GameManager Instance { get { return m_instance; } }
-
+    [SerializeField] PlayerStats[] playerStats;
+    
     private void Start()
     {
-        if (m_instance != null)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            m_instance = this;
-        }
-
         DontDestroyOnLoad(gameObject);
+
+        // Get all characters in game with player stats scripts attached.
+        playerStats = FindObjectsOfType<PlayerStats>();
     }
 
     private void Update()
