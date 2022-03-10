@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get { return m_instance; } }
 
     [SerializeField] private float m_playerMoveSpeed = 1f;
-    
+    private bool deactivateMovement = false;
+
     private Rigidbody2D m_playerRb;
     private Animator m_playerAnimator;
 
@@ -20,6 +21,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 m_mapBottomLeftEdge;
     private Vector3 m_mapUpperRightEdge;
+
+    public bool DeactivateMovement { get { return deactivateMovement; } set { deactivateMovement = value; } }
 
     private void Awake()
     {
@@ -46,19 +49,22 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // Get player input and set the players velocity.
-        m_playerMoveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (!deactivateMovement)
+        {
+            // Get player input and set the players velocity.
+            m_playerMoveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         
-        m_playerVelocity = m_playerMoveInput.normalized * m_playerMoveSpeed * Time.deltaTime;
+            m_playerVelocity = m_playerMoveInput.normalized * m_playerMoveSpeed * Time.deltaTime;
         
-        // doesnt work well with collisions but it stops movement jitteryness with the camera.
-        // TODO - create a different movement/collision system using raycasts instead later. 
-        transform.Translate(m_playerVelocity);
+            // doesnt work well with collisions but it stops movement jitteryness with the camera.
+            // TODO - create a different movement/collision system using raycasts instead later. 
+            transform.Translate(m_playerVelocity);
 
-        // Clamp the player position to the tilemap size
-        //transform.position = new Vector3(
-        //    Mathf.Clamp(transform.position.x, m_mapBottomLeftEdge.x, m_mapUpperRightEdge.x), 
-        //    Mathf.Clamp(transform.position.y, m_mapBottomLeftEdge.y, m_mapUpperRightEdge.y));
+            // Clamp the player position to the tilemap size
+            //transform.position = new Vector3(
+            //    Mathf.Clamp(transform.position.x, m_mapBottomLeftEdge.x, m_mapUpperRightEdge.x), 
+            //    Mathf.Clamp(transform.position.y, m_mapBottomLeftEdge.y, m_mapUpperRightEdge.y));
+        }
 
         // Change player animations
         SetPlayerAnimatorState();

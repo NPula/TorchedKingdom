@@ -16,19 +16,9 @@ public struct Room
     }
 }
 
-// NOT USING AT THE MOMENT.
-// possible tiles to place. 
-// we dont need to move down for this.
-public enum Moves
-{
-    UP,
-    LEFT,
-    RIGHT
-}
-
 public class LevelGenerator 
 {
-    // Number of rooms to generate
+    // Max number of rooms to generate
     private int m_maxRoomAmount = 10;
 
     // Room list size
@@ -37,6 +27,8 @@ public class LevelGenerator
 
     // Room list
     public Room[,] rooms;
+
+    public int SetMaxRoomCount { set { m_maxRoomAmount = value; } }
 
     public LevelGenerator()
     {
@@ -58,9 +50,6 @@ public class LevelGenerator
             }
         }
     }
-
-    // TODO - Doesn't really work for alot of rooms with a smaller array size. 
-    //        Maybe change to fix this since it only creates about 6 rooms with 4x4 array.
 
     // Create a simple path through the array
     public void CreateRandomPath()
@@ -132,6 +121,7 @@ public class LevelGenerator
         PrintToFile();
     }
 
+    // Fills in the room connections dictionary with surrounding rooms.
     private void GeneratePaths()
     {
         for (int i = 0; i < sizeY; i++)
@@ -139,10 +129,6 @@ public class LevelGenerator
             for (int j = 0; j < sizeX; j++)
             {
                 rooms[i, j].connections = GetNeighborRooms(i, j);
-                //bool down = rooms[i, j].connections["Down"];
-                //bool up = rooms[i, j].connections["Up"];
-                //bool left = rooms[i, j].connections["Left"];
-                //bool right = rooms[i, j].connections["Right"];
             }
         }
     }
@@ -157,6 +143,7 @@ public class LevelGenerator
         bool up = ((y - 1) >= 0) ? rooms[y - 1, x].isUsed : false;
         bool down = ((y + 1) < sizeY) ? rooms[y + 1, x].isUsed : false;
 
+        // Return dictionary with surrounding rooms set to true.
         return new Dictionary<string, bool>() {
             {"Left", left},
             {"Right", right},

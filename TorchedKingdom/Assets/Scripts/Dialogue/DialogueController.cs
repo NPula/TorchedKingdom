@@ -38,6 +38,7 @@ public class DialogueController : Singleton<DialogueController>
 
     public void DisplayDialogueText(string charName, string[] dialogue)
     {
+        GameManager.Instance.dialogBoxOpened = true;
         nameText.text = charName;
         dialogueSentences = dialogue;
         currentSentence = 0;
@@ -48,6 +49,7 @@ public class DialogueController : Singleton<DialogueController>
 
     public void CloseDialogueText()
     {
+        GameManager.Instance.dialogBoxOpened = false;
         nameBox.SetActive(false);
         dialogueBox.SetActive(false);
         currentSentence = 0;

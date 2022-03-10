@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] PlayerStats[] playerStats;
+
+    public bool gameMenuOpened, dialogBoxOpened;
     
     private void Start()
     {
@@ -21,6 +23,20 @@ public class GameManager : Singleton<GameManager>
         {
             Application.Quit();
         }
+
+        if (gameMenuOpened || dialogBoxOpened)
+        {
+            PlayerController.Instance.DeactivateMovement = true;
+        }
+        else
+        {
+            PlayerController.Instance.DeactivateMovement = false;
+        }
+    }
+
+    public PlayerStats[] GetPlayerStats()
+    {
+        return playerStats;
     }
 
     private void OnEnable()

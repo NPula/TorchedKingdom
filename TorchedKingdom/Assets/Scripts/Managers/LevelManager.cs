@@ -8,15 +8,12 @@ public class LevelManager : MonoBehaviour
     // Tilemap to confine player to.
     private Tilemap m_tilemap;
 
+    [SerializeField] private int m_maxRoomCount;
+
     // prefabs for each tilemap level layout.
     // TODO - Will probably need a different list for each piece type.
     [SerializeField] private List<GameObject> m_levelPieces;
     private List<Tilemap> tilemaps;
-
-    //[SerializeField] private GameObject tilemapWallUp;
-    //[SerializeField] private GameObject tilemapWallRight;
-    //[SerializeField] private GameObject tilemapWallLeft;
-    //[SerializeField] private GameObject tilemapWallDown;
 
     // Area the player is confined to.
     [SerializeField] private PolygonCollider2D m_playerBounds;
@@ -39,6 +36,7 @@ public class LevelManager : MonoBehaviour
     {
         // Generate a pseudo random array for level generation
         m_levelGen = new LevelGenerator();
+        m_levelGen.SetMaxRoomCount = m_maxRoomCount;
         m_levelGen.CreateRandomPath();
 
         // Used for grabbing the size of the first instantiated tilemap
@@ -94,18 +92,37 @@ public class LevelManager : MonoBehaviour
                     // TODO - Enable this code and comment out the lines underneath eventually. This is has the mapsize-2.
                     // Which creates the maps flush with one another. This causes the player to walk into the 'arealeave trigger' for both maps.
                     // we should fix this later. Another way is to construct the maps around this limitation which might be disirable anyway
-                    // since why have overlapping tiles if you cant see some anyway. Seems kinda wasteful.
+                    // since why have overlapping tiles if you cant see some.
                     //float newLocX = ((m_mapSize.x - 2) * j) - (((m_levelGen.sizeX - 1) / 2) * (m_mapSize.x - 2));
                     //float newLocY = (-(m_mapSize.y - 2) * i) + ((m_levelGen.sizeY - 1) * (m_mapSize.y - 2));
                     
-                    float newLocX = ((m_mapSize.x-1) * j) - (((m_levelGen.sizeX-1) / 2) * (m_mapSize.x-1));
-                    float newLocY = (-(m_mapSize.y-1) * i) + ((m_levelGen.sizeY-1) * (m_mapSize.y-1));
+                    // Mapsize-1 makes the wall flush with one another.
+                    //float newLocX = ((m_mapSize.x-1) * j) - (((m_levelGen.sizeX-1) / 2) * (m_mapSize.x-1));
+                    //float newLocY = (-(m_mapSize.y-1) * i) + ((m_levelGen.sizeY-1) * (m_mapSize.y-1));
+
+                    float newLocX = ((m_mapSize.x) * j) - (((m_levelGen.sizeX-1) / 2) * (m_mapSize.x));
+                    float newLocY = (-(m_mapSize.y) * i) + ((m_levelGen.sizeY-1) * (m_mapSize.y));
 
                     // Instantiate piece
-                    GameObject go = Instantiate(m_levelPieces[index], new Vector3(newLocX, newLocY), Quaternion.identity);
-                    go.transform.parent = parent.transform;
+                    GameObject go;
 
-                    // This only happens once on load so who cares.
+                    // Just some test code for level generation
+                    // might change this up later.
+                    if (i > (m_levelGen.sizeX - (m_levelGen.sizeX * .1f)))
+                    {
+                        go = Instantiate(m_levelPieces[1], new Vector3(newLocX, newLocY), Quaternion.identity);
+                    }
+                    else if (i > (m_levelGen.sizeX - (m_levelGen.sizeX * .5f)))
+                    {
+                        go = Instantiate(m_levelPieces[0], new Vector3(newLocX, newLocY), Quaternion.identity);
+                    }
+                    else
+                    {
+                        go = Instantiate(m_levelPieces[0], new Vector3(newLocX, newLocY), Quaternion.identity);
+                    }
+
+                    go.transform.parent = parent.transform;
+                    // This only happens once on load so doing this should be fine.
                     // We should find an easier way of managing this later. This method makes it
                     // annoying when making changes to objects
                     GameObject wallUp = go.transform.Find("DoorSlots").Find("UpperWall").gameObject;
@@ -118,6 +135,7 @@ public class LevelManager : MonoBehaviour
                     GameObject doorRight = go.transform.Find("DoorSlots").Find("RightDoor").gameObject;
                     GameObject doorLeft = go.transform.Find("DoorSlots").Find("LeftDoor").gameObject;
 
+                    // Generate the doors between the rooms.
                     if (m_levelGen.rooms[i, j].connections["Up"])
                     {
                         wallUp.SetActive(false);
